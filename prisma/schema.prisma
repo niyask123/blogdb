@@ -16,9 +16,3 @@ model Post {
   blogPostDate DateTime
   imageUrl    String
 }
-
-model user {
-  id          Int      @id @default(autoincrement())
-  name     String
-  
-}

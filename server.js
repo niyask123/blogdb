@@ -4,14 +4,17 @@ const express = require('express');
 const multer = require('multer');
 const cloudinary = require('./config'); // Path to your config.js file
 const { PrismaClient } = require('@prisma/client');
+const cors = require('cors'); // Add CORS support
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 const prisma = new PrismaClient();
 
+app.use(cors()); // Enable CORS
 app.use(express.json());
 
-app.post('/posts', upload.single('image'), async (req, res) => {
+// Create a new post
+app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     let imageUrl = '';
     if (req.file) {
@@ -37,7 +40,8 @@ app.post('/posts', upload.single('image'), async (req, res) => {
   }
 });
 
-app.put('/posts/update', upload.single('image'), async (req, res) => {
+// Update an existing post
+app.put('/api/posts/update', upload.single('image'), async (req, res) => {
   try {
     let imageUrl = '';
     if (req.file) {
@@ -64,7 +68,8 @@ app.put('/posts/update', upload.single('image'), async (req, res) => {
   }
 });
 
-app.delete('/posts/:id', async (req, res) => {
+// Delete a post
+app.delete('/api/posts/:id', async (req, res) => {
   try {
     await prisma.post.delete({ where: { id: parseInt(req.params.id, 10) } });
     res.status(204).end();
@@ -74,6 +79,7 @@ app.delete('/posts/:id', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+// Start the server
+app.listen(5222, () => {
+  console.log('Server is running on port 5222');
 });
